@@ -1,5 +1,6 @@
 import request from 'supertest'
 import app from './../src/app'
+import '@types/jest';
 
 describe('teste account', () => {
     it('POST /accounts - deve retornar 201', async () => {
