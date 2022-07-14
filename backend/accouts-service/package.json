@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -r dotenv/config ./dist/server",
+    "build": "tsc",
     "compile": "tsc && node -r dotenv/config ./dist/server",
     "dev": "nodemon -e ts,json --ignore dist --exec \"npm run compile\"",
     "test": "jest"
