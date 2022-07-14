@@ -1,6 +1,5 @@
-import request from 'supertest'
-import app from './../src/app'
-import '@types/jest';
+import request from 'supertest';
+import app from '../src/app';
 
 describe('teste account', () => {
     it('POST /accounts - deve retornar 201', async () => {
@@ -15,6 +14,43 @@ describe('teste account', () => {
         const resultado = await request(app).post('/accounts/').send(payload);
 
         expect(resultado.status).toEqual(201)
+    })
+
+    it('PATCH /accounts:/:id - deve retornar 200', async () => {
+        const payload ={         
+            name: "testnamee",
+            email: 'teste@email.com',
+            password: 'asdasd123123',
+        }
+
+        const resultado = await request(app).patch('/accounts/1').send(payload);
+
+        expect(resultado.status).toEqual(200)
+        expect(resultado.body.id).toEqual(1)
+    })
+
+    it('PATCH /accounts:/:id - deve retornar 404', async () => {
+        const payload = {         
+            name: "testname2",
+            email: 'test2@email.com',
+            password: 'asdasd123123',
+        }
+
+        const resultado = await request(app).patch('/accounts/111111').send(payload);
+
+        expect(resultado.status).toEqual(404)
+    })
+
+    it('PATCH /accounts:/:id - deve retornar 400', async () => {
+        const payload ={         
+            name: "testname2",
+            email: 'test2@email.com',
+            password: 'asdasd123123',
+        }
+
+        const resultado = await request(app).patch('/accounts/abc').send(payload);
+
+        expect(resultado.status).toEqual(400)
     })
 
     it('GET /accounts/ - deve retornar 200', async () => {
@@ -42,7 +78,7 @@ describe('teste account', () => {
 
     it('GET /accounts/:id - deve retornar 400', async () => {
 
-        const resultado = await request(app).get('/accounts/abc');
+        const resultado = await request(app).get('/accounts/ddd');
 
         expect(resultado.status).toEqual(400);
     })

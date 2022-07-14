@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import accountSchema, { IAccount } from '../models/account';
+import { IAccount } from '../models/account';
 
 const accounts: IAccount[] = []
 
@@ -23,6 +23,38 @@ function getAccount(req: Request, res: Response, next: any){
     res.json(accounts[index]);
 }
 
+function setAccount(req: Request, res: Response, next: any){  
+
+    const accountParams = req.body as IAccount;
+
+    const id = parseInt(req.params.id);
+
+    if (!id) {
+        res.status(400).end();  
+    }
+
+    const index = accounts.findIndex(item => item.id == id);
+
+    if (index === -1) 
+        res.status(404).end(); 
+
+    const account = accounts[index];
+
+    if (accountParams.name) {
+        account.name = accountParams.name
+    }
+
+    if (accountParams.email) {
+        account.email = accountParams.email
+    }
+
+    if (accountParams.password) {
+        account.password = accountParams.password
+    }
+
+    accounts[index] = account;
+    res.status(200).json(account);
+}
 
 function addAccounts(req: Request, res: Response, next: any){  
 
@@ -33,4 +65,15 @@ function addAccounts(req: Request, res: Response, next: any){
     res.status(201).json(newAccount);
 }
 
-export default {getAccounts, getAccount, addAccounts}
+function login(req: Request, res: Response, next: any){
+    const loginParams = req.body as IAccount;
+
+    const index = accounts.findIndex(item => item.email == loginParams.email && item.password == loginParams.password);
+
+    if (index === -1) 
+        res.status(401).end(); 
+
+    res.status(200).json({auth: true, token: ""});
+}
+
+export default {getAccounts, getAccount, addAccounts, setAccount, login}
