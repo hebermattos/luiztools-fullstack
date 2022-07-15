@@ -8,7 +8,7 @@ import sequelize from "./services/db";
     await sequelize.sync();
 
     app.listen(port, () => {
-        console.log(`running on port ${process.env.PORT} and db ${process.env.DB_NAME}`);
+        console.log(`running on port '${process.env.PORT}' and db '${process.env.DB_NAME}'`);
     });
 
 })();

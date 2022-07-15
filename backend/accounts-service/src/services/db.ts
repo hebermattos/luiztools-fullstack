@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize/types";
+import { Sequelize } from "sequelize";
 
 const database = process.env.DB_NAME!;
 const usernane = process.env.DB_USER!;
