@@ -8,7 +8,7 @@ async function getAccounts(req: Request, res: Response, next: any) {
 
     const accounts = await AccountRepo.findAll<AccountModel>();
 
-    res.json(accounts);
+    res.status(200).json(accounts);
 }
 
 function getAccount(req: Request, res: Response, next: any) {
