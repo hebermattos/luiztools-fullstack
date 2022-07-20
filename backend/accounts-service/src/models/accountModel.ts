@@ -27,7 +27,7 @@ const accountModel = sequelize.define<AccountModel>('account', {
         allowNull: false,
     },
     status: {
-        type: Sequelize.SMALLINT.UNSIGNED,
+        type: Sequelize.SMALLINT,
         defaultValue: 0,
         allowNull: false
     },
