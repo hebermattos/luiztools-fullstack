@@ -17,34 +17,42 @@ async function getAccount(req: Request, res: Response, next: any) {
     const id = parseInt(req.params.id);
 
     if (!id) {
-        res.status(400).end();
+       return res.status(400).end();
     }
 
     const account = await accountRepo.findById(id);
 
     if (account === null)
-        res.status(404).end();
+        return res.status(404).end();
 
     res.json(account);
 }
 
 async function setAccount(req: Request, res: Response, next: any) {
 
+    const id = parseInt(req.params.id);
+
+    if (!id) {
+        return res.status(400).end();
+    }
+
     const accountParams = req.body as IAccount;
     accountParams.password = auth.hashPassword(accountParams.password);
 
-    const account = await accountRepo.set(req.body.id, accountParams);
+    const account = await accountRepo.set(id, accountParams);
 
     if (account === null)
-        res.status(404).end();
-
+        return res.status(404).end();
+    
     res.status(200).json(account);
 }
 
 async function addAccounts(req: Request, res: Response, next: any) {
 
     const newAccount = req.body as IAccount;
-    newAccount.password = auth.hashPassword(newAccount.password);
+
+    if (newAccount.password) 
+        newAccount.password = auth.hashPassword(newAccount.password);
 
     const result = await accountRepo.add(newAccount);
     newAccount.id = result.id;

@@ -7,7 +7,8 @@ const dbhost = process.env.DB_HOST!;
 
 const sequelize = new Sequelize(database, usernane, password, {
     dialect: 'postgres',
-    host : dbhost
+    host : dbhost,
+    logging: true
 });
 
 export default sequelize;
