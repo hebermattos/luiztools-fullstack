@@ -37,6 +37,7 @@ async function setAccount(req: Request, res: Response, next: any) {
     }
 
     const accountParams = req.body as IAccount;
+
     accountParams.password = auth.hashPassword(accountParams.password);
 
     const account = await accountRepo.set(id, accountParams);

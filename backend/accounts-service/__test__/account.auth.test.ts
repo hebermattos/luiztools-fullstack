@@ -7,7 +7,7 @@ import auth from '../src/services/auth';
 beforeAll(async ()=>{
     const testAccount: IAccount ={
         name: 'jest',
-        email: 'jest@jest.com',
+        email: 'jest2@jest.com',
         password: auth.hashPassword('jest@123'),
         domain: 'jest.com',
         status: 0
@@ -17,14 +17,14 @@ beforeAll(async ()=>{
 })
 
 afterAll(async () => {
-    await accountRepo.removeByEmail('jest@jest.com');
+    await accountRepo.removeByEmail('jest2@jest.com');
 })
 
 describe('teste login', () => {
     it('POST /accounts/login - deve retornar 200', async () => {
 
         const payload ={
-            email: 'jest@jest.com',
+            email: 'jest2@jest.com',
             password: 'jest@123',
         }
         const resultado = await request(app).post('/accounts/login').send(payload);
