@@ -10,12 +10,20 @@ export interface IAccount{
     domain: string
 }
 
+const accountUpdateSchema = Joi.object({
+    name: Joi.string().min(3).max(150),
+    password: Joi.string().alphanum().min(6).max(50),
+    status: Joi.number().integer(),
+    domain: Joi.string().min(5).max(150)
+})
+
 const accountSchema = Joi.object({
     id: Joi.number().integer().min(1),
     name: Joi.string().min(3).max(150).required(),
     email: Joi.string().email().min(8).max(150).required(),
     password: Joi.string().alphanum().min(6).max(50).required(),
-    status: Joi.number().integer()
+    status: Joi.number().integer(),
+    domain: Joi.string().min(5).max(150)
 })
 
 const loginSchema = Joi.object({
@@ -23,4 +31,4 @@ const loginSchema = Joi.object({
     password: Joi.string().alphanum().min(6).max(50).required(),
 })
 
-export { accountSchema, loginSchema };
+export { accountSchema, accountUpdateSchema, loginSchema };

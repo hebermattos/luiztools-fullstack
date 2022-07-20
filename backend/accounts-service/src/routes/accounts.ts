@@ -1,38 +1,14 @@
-import { Router, Request, Response } from "express";
-import Joi from "joi";
+import { Router } from "express";
 import accountsContoller from "../controllers/accounts";
-import {accountSchema, loginSchema} from "../models/account";
-
-function validateSchema(schema: Joi.ObjectSchema<any>, req: Request, res: Response, next: any)
-{
-    const {error} = schema.validate(req.body);
-
-    if (error == null) {
-        return next();
-    }
-
-    const {details} = error;
-
-    const errorMessage = details.map(x=> x.message).join(',');
-
-    res.status(422).json(errorMessage);
-}
-
-function validateAccount(req: Request, res: Response, next: any){
-    return validateSchema(accountSchema, req, res, next);
-}
-
-function validateLogin(req: Request, res: Response, next: any){
-    return validateSchema(loginSchema, req, res, next);
-}
+import { validateUpdateAccount, validateAccount, validateLogin, validateAuth } from "../middlewares/auth"
 
 const router = Router();
 
-router.get('/accounts', accountsContoller.getAccounts);
+router.get('/accounts', validateAuth, accountsContoller.getAccounts);
 
-router.get('/accounts/:id', accountsContoller.getAccount);
+router.get('/accounts/:id', validateAuth, accountsContoller.getAccount);
 
-router.patch('/accounts/:id', accountsContoller.setAccount);
+router.patch('/accounts/:id', validateAuth, validateUpdateAccount, accountsContoller.setAccount);
 
 router.post('/accounts', validateAccount, accountsContoller.addAccounts);
 
