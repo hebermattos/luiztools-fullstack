@@ -1,26 +1,33 @@
 import request from 'supertest';
 import app from '../src/app';
+import { IAccount } from '../src/models/account';
+import accountRepo  from '../src/models/accountRepository';
+import auth from '../src/services/auth';
+
+beforeAll(async ()=>{
+    const testAccount: IAccount ={
+        name: 'jest',
+        email: 'jest@jest.com',
+        password: auth.hashPassword('jest@123'),
+        domain: 'jest.com',
+        status: 0
+    };
+
+    await accountRepo.add(testAccount);
+})
+
+afterAll(async () => {
+    await accountRepo.removeByEmail('jest@jest.com');
+})
 
 describe('teste login', () => {
     it('POST /accounts/login - deve retornar 200', async () => {
 
-        const payloadAccount ={
-            id: 1,
-            name: "testname",
-            email: 'test@email.com',
-            password: 'asdasd123123',
-            status: 1
-        }
-
-        await request(app).post('/accounts/').send(payloadAccount);
-
         const payload ={
-            email: 'test@email.com',
-            password: 'asdasd123123',
+            email: 'jest@jest.com',
+            password: 'jest@123',
         }
         const resultado = await request(app).post('/accounts/login').send(payload);
-
-        console.log(resultado);
 
         expect(resultado.status).toEqual(200);
     })
@@ -32,8 +39,6 @@ describe('teste login', () => {
             password: 'asdasd123123',
         }
         const resultado = await request(app).post('/accounts/login').send(payload);
-
-        console.log(resultado);
 
         expect(resultado.status).toEqual(401);
     })

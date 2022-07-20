@@ -4,11 +4,11 @@ import app from '../src/app';
 describe('teste account', () => {
     it('POST /accounts - deve retornar 201', async () => {
         const payload ={
-            id: 1,
             name: "testname",
             email: 'test@email.com',
             password: 'asdasd123123',
-            status: 1
+            status: 1,
+            domain: 'teste.com'
         }
 
         const resultado = await request(app).post('/accounts/').send(payload);

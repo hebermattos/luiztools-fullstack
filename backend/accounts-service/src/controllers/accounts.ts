@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { IAccount } from '../models/account';
-import  accountRepo  from '../models/accountModel';
+import { IAccount, ILoginAccount } from '../models/account';
+import accountRepo from '../models/accountRepository';
 import auth from '../services/auth';
 
 const accounts: IAccount[] = []
@@ -33,7 +33,7 @@ async function setAccount(req: Request, res: Response, next: any) {
     const accountParams = req.body as IAccount;
     accountParams.password = auth.hashPassword(accountParams.password);
 
-    const account = await accountRepo.set(req.body.id, accountParams);    
+    const account = await accountRepo.set(req.body.id, accountParams);
 
     if (account === null)
         res.status(404).end();
@@ -46,33 +46,35 @@ async function addAccounts(req: Request, res: Response, next: any) {
     const newAccount = req.body as IAccount;
     newAccount.password = auth.hashPassword(newAccount.password);
 
-    const result =  await accountRepo.add(newAccount);
+    const result = await accountRepo.add(newAccount);
     newAccount.id = result.id;
 
     res.status(201).json(newAccount);
 }
 
 async function login(req: Request, res: Response, next: any) {
-    const loginParams = req.body as IAccount;
+    const loginParams = req.body as ILoginAccount;
 
     const account = await accountRepo.findByEmail(loginParams.email);
-   
+
     if (account === null) {
         return res.status(401).end();
     }
-    
+
     const isValid = auth.comparePassword(loginParams.password, account.password);
 
     if (!isValid) {
         res.status(401).end();
-    }
+    }  
 
-    const token = auth.sign(account.id);
-    res.json({auth: true, token});  
+    if (account.id) {
+        const token = auth.sign(account.id);
+        res.json({ auth: true, token });
+    }
 }
 
 function logoutAccount(req: Request, res: Response, next: any) {
-    res.json({auth: false, token: null});
+    res.json({ auth: false, token: null });
 }
 
 export default { getAccounts, getAccount, addAccounts, setAccount, login, logoutAccount }
