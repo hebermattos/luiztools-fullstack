@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { IAccount, ILoginAccount } from '../models/account';
 import accountRepo from '../models/accountRepository';
-import auth from '../services/auth';
+import auth from '../../../shared/src/auth';
 
 const accounts: IAccount[] = []
 

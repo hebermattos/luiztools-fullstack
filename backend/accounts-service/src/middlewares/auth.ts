@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { Request, Response } from "express";
 import { accountSchema, accountUpdateSchema, loginSchema } from "../models/account";
-import auth from "../services/auth";
+import auth2 from "../../../shared/src/auth";
 
 function validateSchema(schema: Joi.ObjectSchema<any>, req: Request, res: Response, next: any)
 {
@@ -35,7 +35,7 @@ async function validateAuth(req: Request, res: Response, next: any){
 
     if (!token) return res.status(401).end();
 
-    const payload = await auth.verify(token);
+    const payload = await auth2.verify(token);
 
     if (!payload) return res.status(401).end();
         
@@ -44,4 +44,4 @@ async function validateAuth(req: Request, res: Response, next: any){
     next();
 }
 
-export {validateAccount, validateLogin, validateUpdateAccount, validateAuth};
+export {validateAccount, validateLogin, validateUpdateAccount, validateAuth };
